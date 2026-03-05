@@ -11,15 +11,15 @@ let eye = new Vector(3, 0, 5)
 let scene = new Scene()
 
 let shard = new Shard(-1, -1, -1, 1)
-let n = 10
-for (let x = -n; x < n; x++) {
-    for (let y = -n; y < n; y++) {
+let n = 3
+for (let x = -n; x < n; x+=1.5) {
+    for (let y = -n; y < n; y+=1.5) {
 
         let matrix = Translate(new Vector(x, y, 0))
         
         matrix = matrix.scale(new Vector(.5,.5,Math.random()+1))
-        matrix = matrix.rot(new Vector(0,0,1),radians(Math.random()*20))
-        // matrix = matrix.rot(new Vector(0,1,0),radians(Math.random()*90))
+        matrix = matrix.rotate(new Vector(0,0,1),radians(Math.random()*20))
+        // matrix = matrix.rotate(new Vector(0,1,0),radians(Math.random()*90))
 
         let shape = new TransformedShape(shard, matrix)
         scene.add(shape)
@@ -29,7 +29,7 @@ for (let x = -n; x < n; x++) {
 
 
 
-// let A = rot(eye,0)
+// let A = rotate(eye,0)
 // console.log(eye,A,A.mulDirection(eye))
 
 // eye = A.mulPosition(eye)

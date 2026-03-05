@@ -110,7 +110,6 @@ export class Mesh {
         for(let z = z1;z<=z2;z+=size){
             let plane = new Plane(new Vector(0,0,z),new Vector(0,0,1))
             let paths = plane.intersectMesh(m)
-            console.log(paths)
             for (let path of paths.paths){
                 for (let v of path.verts){
                     let x = Math.floor(v.x/size+.5)*size

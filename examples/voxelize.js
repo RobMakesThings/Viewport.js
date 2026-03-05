@@ -3,8 +3,7 @@ import { Scene, Cube,Vector,loadOBJ } from "../src/viewport.js";
 
 
 async function loadObject() {
-    const text = await fetch("./assets/wildSphere.obj").then(r => r.text());
-    let object = loadOBJ(text) 
+    let object = loadOBJ("./assets/wildSphere.obj") 
     return object
 }
 let scene = new Scene()
@@ -20,8 +19,8 @@ let paths
 let eye = new Vector(0, 1, 3)
 let center = new Vector(0, 0, 0)
 let up = new Vector(0, 0, 1)
-let h = 1000
-let w = 1000
+let h = 250
+let w = 250
 let fovy = 30
 // console.log(scene)
 
@@ -40,12 +39,12 @@ const sketch =  (sketch) => {
         let cubes = mesh.voxelize(1/36)
 
         for (let cube of cubes){
-            // scene.add(cube)
+            scene.add(cube)
         }
         // mesh.fitInside(cube.boundingBox(),eye)
         // mesh.unitCube()
         // mesh.moveTo(new Vector(.2,.2,.2),new Vector(.5,.5,.5))
-        scene.add(mesh)
+        // scene.add(mesh)
         paths = scene.render(eye, center, up, w, h, fovy, 0.01, 100, 0.01)
         console.log(paths)
         console.log(scene, 2)
@@ -56,7 +55,7 @@ const sketch =  (sketch) => {
     sketch.draw = () => {
         s.background(255);
         s.stroke(0)
-        s.nofill()
+        s.noFill()
         for (let path of paths.paths) {
             s.push()
             s.beginShape()

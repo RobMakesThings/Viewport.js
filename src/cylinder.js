@@ -186,7 +186,7 @@ export function newTransformedOutlineCylinder(eye, up, v0, v1, radius) {
     let m = Translate(v0)
     if (a != 0) {
         let u = d.cross(up).normalize()
-        m = rot(u, a).translate(v0)
+        m = Rotate(u, a).translate(v0)
     }
     let c = new OutlineCylinder(m.inverse().mulPosition(eye), up, radius, 0, z)
     return new TransformedShape(c, m)

@@ -21,7 +21,7 @@ import { Cube, StripedCube } from './cube.js'
 import { Cylinder, OutlineCylinder, newTransformedOutlineCylinder } from './cylinder.js'
 import { Cone, OutlineCone, newTransformedOutlineCone } from './cone.js'
 import { FunctionLines } from './function.js'
-import { Translate, Matrix, lookAt,rot, } from './matrix.js'
+import { Translate, Matrix, lookAt,Rotate, } from './matrix.js'
 import { Mesh } from './mesh.js'
 import { loadOBJ } from './obj.js'
 import { Paths, Path } from './path.js'
@@ -39,7 +39,7 @@ export {
     loadOBJ, FunctionLines,
     Box, Cone, newTransformedOutlineCone, OutlineCone,
      TransformedShape, ShadedSphere, Sphere, HSphere,
-    OutlineSphere, Translate, Matrix, lookAt,rot,constrain,
+    OutlineSphere, Translate, Matrix, lookAt,Rotate as rot,constrain,
     Cylinder, OutlineCylinder, newTransformedOutlineCylinder,
     newDifference, newIntersection, median, remap, radians, degrees, Shard,
     Mesh, Path, Paths, Triangle, Plane,

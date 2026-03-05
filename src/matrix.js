@@ -2,6 +2,9 @@ import { Vector } from "./vector.js";
 import { PI } from "./common.js"
 import { Box } from "./box.js";
 import { Ray } from "./ray.js";
+/**
+ * Matrix class for transforming paths and shapes. 
+ */
 export class Matrix {
     constructor(data = null) {
         if (data) {
@@ -23,19 +26,34 @@ export class Matrix {
     static identity() {
         return new Matrix();
     }
+    /**
+     * returns new matrix translated 
+     * @param {Vector} v 
+     * @returns {Matrix} new matrix 
+     */
     translate(v) {
         v = Translate(v)
         v = v.mult(this)
         return v
     }
+       /**
+     * returns new matrix scaled 
+     * @param {Vector} v 
+     * @returns {Matrix} new matrix 
+     */
     scale(v) {
-        v = Vscale(v)
+        v = Scale(v)
         v = v.mult(this)
         return v
 
     }
-    rot(v, a) {
-        return rot(v, a).mult(this)
+     /**
+     * returns new matrix rotated 
+     * @param {Vector} v 
+     * @returns {Matrix} new matrix 
+     */
+    rotate(v, a) {
+        return Rotate(v, a).mult(this)
     }
     frustrum(l, r, b, t, n, f) {
         let matrix = frustrum(l, r, b, t, n, f)
@@ -50,13 +68,16 @@ export class Matrix {
     }
     perspective(fovy, aspect, near, far) {
         let m = perspective(fovy, aspect, near, far)
-        // console.log(m, this, "inside perspective")
 
         m = m.mult(this)
-        // console.log(m, this.m, "inside perspective after mult")
 
         return m
     }
+     /**
+     * returns new matrix multiplied by input matrix 
+     * @param {Matrix} 
+     * @returns {Matrix} new matrix 
+     */
     mult(b) {
         let m = new Matrix()
         let a = this
@@ -78,13 +99,16 @@ export class Matrix {
         m.x33 = a.x30 * b.x03 + a.x31 * b.x13 + a.x32 * b.x23 + a.x33 * b.x33
         return m
     }
+    /**
+     * multiplies input vector b matrix.mulPosistion(b)
+     * @param {Vector} b 
+     * @returns {Vector} 
+     */
     mulPosition(b) {
         let a = this
-        // console.log(a, b, "in Vec mul position")
         let x = a.x00*b.x + a.x01*b.y + a.x02*b.z + a.x03
         let y = a.x10*b.x + a.x11*b.y + a.x12*b.z + a.x13
         let z = a.x20*b.x + a.x21*b.y + a.x22*b.z + a.x23
-        // console.log(x, y, z, this, b, "out Vec mul position" )
 
         return new Vector(x, y, z)
 
@@ -105,7 +129,6 @@ export class Matrix {
         let z = a.x20 * b.x + a.x21 * b.y + a.x22 * b.z
         let out = new Vector(x, y, z)
         out= out.normalize()
-        // console.log("muldirec", out)
         return out
     }
     mulRay(ray) {
@@ -168,7 +191,6 @@ export class Matrix {
         let a = this
         let m = new Matrix()
         let d = a.determinant()
-        // console.log(JSON.stringify(m), "matrix at inverse, but before calcs", d, this)
 
         m.x00 = (a.x12 * a.x23 * a.x31 - a.x13 * a.x22 * a.x31 + a.x13 * a.x21 * a.x32 - a.x11 * a.x23 * a.x32 - a.x12 * a.x21 * a.x33 + a.x11 * a.x22 * a.x33) / d
         m.x01 = (a.x03 * a.x22 * a.x31 - a.x02 * a.x23 * a.x31 - a.x03 * a.x21 * a.x32 + a.x01 * a.x23 * a.x32 + a.x02 * a.x21 * a.x33 - a.x01 * a.x22 * a.x33) / d
@@ -187,7 +209,6 @@ export class Matrix {
         m.x32 = (a.x02 * a.x11 * a.x30 - a.x01 * a.x12 * a.x30 - a.x02 * a.x10 * a.x31 + a.x00 * a.x12 * a.x31 + a.x01 * a.x10 * a.x32 - a.x00 * a.x11 * a.x32) / d
 
         m.x33 = (a.x01 * a.x12 * a.x20 - a.x02 * a.x11 * a.x20 + a.x02 * a.x10 * a.x21 - a.x00 * a.x12 * a.x21 - a.x01 * a.x10 * a.x22 + a.x00 * a.x11 * a.x22) / d
-        // console.log(m, "matrix at inverse")
         return m
     }
 
@@ -195,7 +216,7 @@ export class Matrix {
 
 }
 /**
- * 
+ * return translated matrix
  * @param {Vector} v 
  * @returns {Matrix}
  */
@@ -210,8 +231,12 @@ export function Translate(v) {
     )
 
 }
-
-export function Vscale(v) {
+/**
+ * return scaled matrix
+ * @param {Vector} v 
+ * @returns {Matrix}
+ */
+export function Scale(v) {
     return new Matrix(
         [
             [v.x, 0, 0, 0],
@@ -222,8 +247,13 @@ export function Vscale(v) {
     )
 
 }
-
-export function rot(v, a) {
+/**
+ * 
+ * @param {Vector} v 
+ * @param {Number} a Angle in radians or use radians(90) to translate degrees
+ * @returns {Matrix}
+ */
+export function Rotate(v, a) {
     v = v.normalize()
     let s = Math.sin(a)
     let c = Math.cos(a)

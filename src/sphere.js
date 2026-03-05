@@ -2,7 +2,7 @@
 import { Vector ,randomUnitVector} from './vector.js'
 import { Box } from './box.js'
 import { Path,Paths } from './path.js'
-import { Translate,rot } from './matrix.js'
+import { Translate,Rotate } from './matrix.js'
 import { radians } from './util.js'
 import { Hit ,noHit} from './hit.js'
 import { remap } from './util.js'
@@ -135,7 +135,7 @@ export class Sphere {
             let m = new Matrix()
             for (let j = 0; j < 3; j++) {
                 let v = randomUnitVector()
-                m = m.rot(v, Math.random() * 2 * Math.PI)
+                m = m.rotate(v, Math.random() * 2 * Math.PI)
             }
             m = m.translate(s.center)
             paths.push(equator.transform(m))
@@ -298,7 +298,7 @@ export class ShadedSphere extends Sphere{
             let pNorm = lo.dot(p.normalize())
             let nSteps = maxSteps-remap(pNorm,-1,1,5,maxSteps)
             for(let j=0; j<nSteps;j++){
-                let rotM = rot(rotAxis,radians(angleStep*j))
+                let rotM = Rotate(rotAxis,radians(angleStep*j))
                 let newPoint = rotM.mulDirection(p).normalize().mulScalar(s.radius).add(s.center)
                 path.push(newPoint)
             }

@@ -15,24 +15,24 @@ let shape = newDifference(
         new Cube(new Vector(-.8, -.8, -.8), new Vector(.8, .8, .8))
     ),
     new Cylinder(.4, -2, 2),
-    new TransformedShape(new Cylinder(.4, -2, 2), rot(new Vector(1, 0, 0), radians(90))),
-    new TransformedShape(new Cylinder(.4, -2, 2), rot(new Vector(0, 1, 0), radians(90)))
+    new TransformedShape(new Cylinder(.4, -2, 2), Rotate(new Vector(1, 0, 0), radians(90))),
+    new TransformedShape(new Cylinder(.4, -2, 2), Rotate(new Vector(0, 1, 0), radians(90)))
 
 
 )
 
 // shape = newDifference(new Cube(new Vector(-.8, -.8, -.8), new Vector(.8, .8, .8)),
-//  new TransformedShape(new Cylinder(.2, -1, 1), rot(new Vector(1, 0, 0), radians(90))))
-// let m = rot(new Vector(0, 1, 0), radians(90))
+//  new TransformedShape(new Cylinder(.2, -1, 1), Rotate(new Vector(1, 0, 0), radians(90))))
+// let m = Rotate(new Vector(0, 1, 0), radians(90))
 // m= m.translate(new Vector(.2,.2,.2))
 
 // // shape = new TransformedShape(shape, m)
 // let shape1 = new Cube(new Vector(-.3, -.3, -.3), new Vector(.3, .3, .3))
 
-// // let shape2 = new TransformedShape(new Cylinder(.2, -1, 1), rot(new Vector(0, 1, 0), radians(90)))
+// // let shape2 = new TransformedShape(new Cylinder(.2, -1, 1), Rotate(new Vector(0, 1, 0), radians(90)))
 // let cube1 = new Cube(new Vector(-.3,-.3,-.3),new Vector(.3,.3,.3))
 // cube1 = new TransformedShape(cube1,m)
-// let shape2 = new TransformedShape(new Cylinder(.2, -1, 1), rot(new Vector(0, 1, 0), radians(90)))
+// let shape2 = new TransformedShape(new Cylinder(.2, -1, 1), Rotate(new Vector(0, 1, 0), radians(90)))
 
 // let cone = new Cone(.3,1)
 // // shape = new TransformedShape(cone, m)

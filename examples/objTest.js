@@ -42,8 +42,8 @@ const sketch =  (sketch) => {
         // mesh.fitInside(cube.boundingBox(),new Vector(.5,.5,.5))
         mesh.unitCube()
         let tMatrix = Translate(new Vector(.2,.2,0))
-        tMatrix = tMatrix.rot(up,radians(90))
-        tMatrix = tMatrix.rot(new Vector(0,1,0),radians(90))
+        tMatrix = tMatrix.rotate(up,radians(90))
+        tMatrix = tMatrix.rotate(new Vector(0,1,0),radians(90))
 
         // mesh.transform(tMatrix)
         // mesh.moveTo(new Vector(2,2,.2),new Vector(5,.5,.5))

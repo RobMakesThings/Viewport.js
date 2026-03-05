@@ -1,13 +1,13 @@
 
 
-import { Scene, Cube,Vector,OutlineSphere,Cone ,StripedCube} from "../src/viewport.js";
+import { Scene, Cube,Vector,ShadedSphere,Cone ,StripedCube, TransformedShape, Translate,Sphere} from "../src/viewport.js";
 
 
 let scene = new Scene()
 let n = 0
 let center = new Vector(0, 0, 0)
 let up = new Vector(0, 0, 1)
-let eye = new Vector(3, 3, 3)
+let eye = new Vector(3, 0, 3)
 
 
 let cube = new Cube()
@@ -15,22 +15,25 @@ let light = new Vector(-1,1,3)
 let c = -5
 let s = .5
 let cube2 = new Cube(new Vector(c-s,c-s,c-s),new Vector(c+s*3,c+s,c+s*3))
-let cone = new Cone(1,1.5)
-// cone = new tranformedShape
+let cone = new Cone(.3,1.5)
+cone = new TransformedShape(cone,Translate(new Vector(2,0,0)))
 let stripeCube = new StripedCube(new Vector(-.5,-.5,-.5), new Vector(.5,.5,.5), 10, 10, 0, .8, 0, .5)
-
-// let sphere = new Sphere(new Vector(0,.2,.1),.5)
+scene.add(cone)
+let sphere = new Sphere(new Vector(0,.2,.1),.5)
 // let sphere = new ShadedSphere(new Vector(0,0,0),.5,light,eye,up,150,120)
-let sphere = new OutlineSphere(new Vector(0,.2,.1),.5,eye,up)
+// let sphere = new OutlineSphere(new Vector(0,.2,.1),.5,eye,up)
+let matrix = Translate(new Vector(-2,0,0))
+sphere = new TransformedShape(sphere,matrix)
 // let sphere = new HSphere(new Vector(0,.2,.1),.5,50)
 
+matrix = matrix.translate(new Vector(0,-3,0))
+cube = new TransformedShape(cube2 ,matrix)
+scene.add(stripeCube)
 
-// scene.add(stripeCube)
-
-// scene.add(sphere)
+scene.add(sphere)
 scene.add(cube)
 
-// let A = rot(eye,0)
+// let A = Rotate(eye,0)
 // console.log(eye,A,A.mulDirection(eye))
 
 // eye = A.mulPosition(eye)
@@ -45,7 +48,7 @@ console.log(scene)
 let paths = scene.render(eye, center, up, w, h, fovy, 0.01, 100,0.1)
 console.log(paths)
 console.log(scene, 2)
-paths.pathsToSVG(paths,h,w)
+// paths.pathsToSVG(paths,h,w)
 const sketch = (sketch) => {
 
 
