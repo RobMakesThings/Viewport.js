@@ -26,7 +26,7 @@ If you want to draw your own paths, you can override  Primitive.prototype.paths(
 
 Meshes can be added as OBJ, STL, or just by making yuour own triangles. 
 
-[Documentation](https://robmakesthings.github.io/Viewport) is available. I tried to document anything an artist would expect to work with. 
+[Documentation](https://robmakesthings.github.io/Viewport.js) is available. I tried to document anything an artist would expect to work with. 
 
 Examples are available to in the example directory, but to setup a scene, it only takes a dozen lines of code as outlined below.  It works with p5.js as a canvas but is mainly designed to output SVG's for later plotting. 
 
