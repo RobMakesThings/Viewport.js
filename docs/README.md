@@ -6,7 +6,9 @@ Below I've added some quick links to primitives, and a p5 sketch to play around 
 - [Cone](./Cone.html) [OutlineCone](./OutlineCone_OutlineCone.html)  
 - [Cylinder](./Cylinder.html) [OutlineCylinder](./OutlineCylinder.html)  
 - [Shard](./Shard.html) -- like a diamond 
-- [Mesh](./Mesh.html) - [Obj](./global.html#loadOBJ) and [STL](./global.html#loadTextSTl) support. 
+- [Mesh](./Mesh.html) - [Obj](./global.html#loadOBJ) and [STL](./global.html#loadTextSTl) 
+- [FunctionLines](./FunctionLines.html) Plot a function in 3d space
+
 
 Meshes can be added as OBJ, STL, or just by making yuour own triangles. 
 
@@ -48,6 +50,7 @@ cube = new TransformedShape(cube,matrix)
 scene.add(cube)
 ````
 
+If you want to draw your own paths, you can override "Primitive".prototype.paths() or edit the source file. Paths should be created of a [Paths](./Paths.html) object made up of [Path](./Path.html) objects. 
 
 
 

@@ -22,7 +22,6 @@ export class Triangle {
         this.updateBoundingBox()
     }
     updateBoundingBox() {
-        // console.log(this)
         let min = this.v1.min(this.v2)
         min = min.min(this.v3)
         let max = this.v1.max(this.v2)
@@ -43,19 +42,14 @@ export class Triangle {
         let e1x = t.v2.x - t.v1.x // edge 1 x 
         let e1y = t.v2.y - t.v1.y
         let e1z = t.v2.z - t.v1.z
-        // console.log(e1x,e1y,e1z,"edge 2's")
         let e2x = t.v3.x - t.v1.x // edge 2 x 
         let e2y = t.v3.y - t.v1.y
         let e2z = t.v3.z - t.v1.z
-        // console.log(e2x,e2y,e2z,"edge 2's")// edges seem fine
-        // console.log(ray)// have different ray? 
         let px = ray.direction.y * e2z - ray.direction.z * e2y
         let py = ray.direction.z * e2x - ray.direction.x * e2z
         let pz = ray.direction.x * e2y - ray.direction.y * e2x
-        // console.log(px,py,pz,"py's and stuff");//wrong det here 
         
         let det = e1x * px + e1y * py + e1z * pz
-        // console.log(det,"det");//wrong det here 
         
         if (det > -EPS && det < EPS) {
             return noHit
@@ -72,9 +66,8 @@ export class Triangle {
         let qy = tz * e1x - tx * e1z
         let qz = tx * e1y - ty * e1x
         let v = (ray.direction.x * qx + ray.direction.y * qy + ray.direction.z * qz) * inv
-        // console.log(u,v);
         
-        if (v < 0 || u+v > 1) {/// seems issue here 
+        if (v < 0 || u+v > 1) {
             return noHit
         }
         let d = (e2x * qx + e2y * qy + e2z * qz) * inv
@@ -85,7 +78,6 @@ export class Triangle {
     }
     paths(){
         let t = this
-        // console.log(this)
         return  new Paths([
             new Path([t.v1,t.v2]),
             new Path([t.v2,t.v3]),

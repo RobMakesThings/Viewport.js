@@ -9,6 +9,7 @@ let below = 1
 
 export let Direction = { above: above, below: below }
  /**
+  * Plot lines based on equation in 3d space
      * @param {function} func given function in arrow format 
      * @example (x,y)=>{return -1/(x*x+y*y)}
      * 
