@@ -70,11 +70,7 @@ const sketch = (sketch) => {
 
             s.translate(-w / 2, -h / 2)
 ;
-            // while (path.type === "paths"){
-            //     path = path.paths
-            // }
-            // console.log(path.paths[0].paths[0].verts);
-
+          
             for (let vert of path.verts) {
 
                 s.vertex(vert.x, vert.y)

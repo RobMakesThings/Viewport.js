@@ -60,8 +60,6 @@ const sketch = (sketch) => {
 
             s.translate(-w / 2, -h / 2)
 
-            // s.scale(1,-1)
-            // s.rotate()
             for (let vert of path.verts) {
                 s.vertex(vert.x, vert.y)
 

@@ -14,8 +14,8 @@ import { Triangle } from "./triangle.js"
 
 /**
      * 
-     * 
-     * @see {@link loadOBJ} {@link loadBinaryStl},or {@link loadTextStl} to load a model or build your own triangles from scratch
+     * build your own Triangles to place inside, or use a model loader function
+     * @see {@link loadOBJ} {@link loadBinaryStl},or {@link loadTextSTL} to load a model or build your own triangles from scratch
      * @param {Triangle} triangles 
      * 
      * 
@@ -120,7 +120,7 @@ export class Mesh {
     }
     /**
      * 
-     * @param {Number} size of cube
+     * @param {Number} size Size of cube example 1/36
      * @returns {Array[Cube]} Array of cubes to be added to scene
      */
     voxelize(size) {

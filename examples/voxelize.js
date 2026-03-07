@@ -22,7 +22,6 @@ let up = new Vector(0, 0, 1)
 let h = 250
 let w = 250
 let fovy = 30
-// console.log(scene)
 
 const sketch =  (sketch) => {
 
@@ -41,13 +40,8 @@ const sketch =  (sketch) => {
         for (let cube of cubes){
             scene.add(cube)
         }
-        // mesh.fitInside(cube.boundingBox(),eye)
-        // mesh.unitCube()
-        // mesh.moveTo(new Vector(.2,.2,.2),new Vector(.5,.5,.5))
-        // scene.add(mesh)
+     
         paths = scene.render(eye, center, up, w, h, fovy, 0.01, 100, 0.01)
-        console.log(paths)
-        console.log(scene, 2)
         // paths.pathsToSVG(paths,h,w)
 
     };
@@ -60,13 +54,11 @@ const sketch =  (sketch) => {
             s.push()
             s.beginShape()
             s.translate(w / 2, h / 2)
-            // s.rotate(s.PI/3)
             s.scale(1, -1)
 
             s.translate(-w / 2, -h / 2)
 
-            // s.scale(1,-1)
-            // s.rotate()
+          
             for (let vert of path.verts) {
                 s.vertex(vert.x, vert.y)
 

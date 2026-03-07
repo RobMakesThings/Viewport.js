@@ -70,24 +70,18 @@ const sketch = (sketch) => {
         s.noFill()
         let sinMov = Math.sin(((s.frameCount % 50) / 50) * 6.28)
 
-        // console.log(sinMov)
-        // sinMov = s.map(sinMov, -1, 1, .5, .9)
-        // sinMov = easeInOutQuart(sinMov)
-        // sinMov = s.map(sinMov, 0, 1, -.3, .1)
-        // eye = eye.addScalar(sinMov)
+      
         console.log(paths)
 
         for (let path of paths.paths) {
             s.push()
             s.beginShape()
             s.translate(w / 2, h / 2)
-            // s.rotate(s.PI/3)
             s.scale(1, -1)
 
             s.translate(-w / 2, -h / 2)
 
-            // s.scale(1,-1)
-            // s.rotate()
+        
             for (let vert of path.verts) {
                 s.vertex(vert.x, vert.y)
 
