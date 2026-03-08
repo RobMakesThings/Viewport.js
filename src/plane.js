@@ -130,13 +130,13 @@ export class TerrainPlane extends Plane {
         for (let i = 0; i <= this.vertices.length; i += lineLength) {
             let line = this.vertices.slice(i, i + lineLength)
             if (i == 0 || i == this.vertices.length) {
-                // paths.push(new Path(line))
+                paths.push(new Path(line))
 
             }
             else {
                 lastLine = this.vertices.slice(i - lineLength, (i - lineLength) + lineLength)
 
-                let numLines = 10
+                let numLines = 3
 
                 for (let j = 0; j <= numLines; j++) {
                     let interpLine = []
@@ -147,7 +147,7 @@ export class TerrainPlane extends Plane {
                         let newVert = vert.lerp(lastLine[index], lerpFactor)
                         if (index > 1) {
                         }
-                        newVert = newVert.add(new Vector(0, 0,.9))
+                        newVert = newVert.add(new Vector(0, 0,.29))
                         interpLine.push(newVert)
                     }
                     paths.push(new Path(interpLine))
