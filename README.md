@@ -4,7 +4,7 @@ Viewport is a vector-based 3D renderer written in javascript. It is used to prod
 ![image](./examples/assets/img/header.png)
 
 
-Viewport is a port or translation of [Ln](https://github.com/LoicGoulefert/ln), a 3d line art render engine originally developed by Michael Fogleman and expanded upon by Loic Goulefert written in (Go)[https://go.dev/]. 
+Viewport is a port or translation of [Ln](https://github.com/LoicGoulefert/ln), a 3d line art render engine originally developed by Michael Fogleman and expanded upon by Loic Goulefert written in [Go](https://go.dev/). 
 
 I ported this library to javascript for myself to use and I thought it would be a good way to "learn" some Go. Most functionality is essentailly the same between libraries as everything was ported line by line. 
 

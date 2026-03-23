@@ -124,7 +124,6 @@ export class TerrainPlane extends Plane {
         for (let face of faceIndicies) {
             this.triangles.push(new Triangle(this.vertices[face[0]], this.vertices[face[1]], this.vertices[face[2]]))
         }
-        // console.log(this)
         this.mesh = new Mesh(this.triangles)
     }
 
