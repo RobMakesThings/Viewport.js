@@ -27,6 +27,8 @@ export class Mesh {
         this.box = boxForTriangles(triangles)
         this.triangles = triangles
         this.tree = null
+        this.color = "#000000"
+
         this.compile()
 
     }

@@ -19,6 +19,8 @@ export class Triangle {
         this.v2 = v2
         this.v3 = v3
         this.box
+        this.color = "#000000"
+
         this.updateBoundingBox()
     }
     updateBoundingBox() {
@@ -79,9 +81,9 @@ export class Triangle {
     paths(){
         let t = this
         return  new Paths([
-            new Path([t.v1,t.v2]),
-            new Path([t.v2,t.v3]),
-            new Path([t.v3,t.v1])
+            new Path([t.v1,t.v2],this.color),
+            new Path([t.v2,t.v3],this.color),
+            new Path([t.v3,t.v1],this.color)
 
         ]
         

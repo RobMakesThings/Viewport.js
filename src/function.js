@@ -24,6 +24,8 @@ export class FunctionLines {
         this.function = func
         this.box = box
         this.direction = Direction
+        this.color = "#000000"
+
     }
     
     compile() {
@@ -71,7 +73,7 @@ export class FunctionLines {
             let z = this.function(x, y)
             z = min(z, this.box.max.z)
             z = max(z, this.box.min.z)
-            path.push(new Vector(x, y, z))
+            path.push(new Vector(x, y, z),this.color)
 
         }
         return new Paths(new Path(path))
@@ -92,7 +94,7 @@ export class FunctionLines {
                 z = max(z, this.box.min.z)
                 path.push(new Vector(x, y, z))
             }
-            paths.push(new Path(path))
+            paths.push(new Path(path,this.color))
 
         }
         return new Paths(paths)
@@ -110,7 +112,7 @@ export class FunctionLines {
                 z = max(z, this.box.min.z)
                 path.push(new Vector(x, y, z))
             }
-            paths.push(new Path(path))
+            paths.push(new Path(path,this.color))
         }
         for (let y = this.box.min.y; y <= this.box.max.y; y += step) {
             let path = []
@@ -121,7 +123,7 @@ export class FunctionLines {
                 path.push(new Vector(x, y, z))
 
             }
-            paths.push(new Path(path))
+            paths.push(new Path(path,this.color))
 
         }
         return new Paths(paths)

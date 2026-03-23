@@ -7,9 +7,10 @@ import { clipFilter } from "./filter.js"
  *  a path consists of at least two vectors creating a line
  */
 export class Path {//
-    constructor(verts) {
+    constructor(verts=[],color="#000000") {
         this.type = "path"
         this.verts = verts
+        this.color= color
    
 
 
@@ -30,7 +31,7 @@ export class Path {//
 
 
         }
-        return new Path(result)
+        return new Path(result,this.color)
     }
     chop(step) {
         let result = []
@@ -55,7 +56,7 @@ export class Path {//
             result.push(b)
 
         }
-        return new Path(result)
+        return new Path(result,this.color)
 
     }
     filter(matrix, eye, step) {
@@ -73,14 +74,14 @@ export class Path {//
             }
             else {
                 if (path.length > 1) {
-                    result.push(new Path(path))
+                    result.push(new Path(path,this.color))
                 }
                 path = []
             }
 
         }
         if (path.length > 1) {
-            result.push(new Path(path))
+            result.push(new Path(path,this.color))
 
 
         }
@@ -125,15 +126,20 @@ export class Path {//
             if(r2 instanceof Path){
                 r2 = r2.verts
             }
-            return new Path(r1.slice(0, r1.length - 1).concat(r2))
+            return new Path(r1.slice(0, r1.length - 1).concat(r2),this.color)
         }
         else {
-            return new Path([a, b])
+            return new Path([a, b],this.color)
         }
 
     }
-    toSVG(path = this) {
+    toSVG(color = this.color) {
+        if(typeof color === "function"){
+            // console.log(this)
+            color = color(this)
 
+        }
+        // console.log(color)
         let coords = ''
         for (let v of this.verts) {
 
@@ -142,7 +148,7 @@ export class Path {//
        
         const points = coords
 
-        return `<polyline stroke="black" fill="none" points="${points}" />`;
+        return `<polyline stroke="${color}" fill="none" points="${points}" />`;
     }
 }
 
@@ -187,7 +193,7 @@ export class Paths {
         for (let path of this.paths) {
             path = path.filter(matrix, eye, step)
             
-                result.push(...path.paths)//unpack values here or else we've got Paths inside of Path or some bs 
+                result.push(...path.paths)
 
 
 
@@ -222,7 +228,6 @@ export class Paths {
 
         // Add the coordinate system transformation (flips Y-axis to be bottom-up)
         lines.push(`  <g transform="translate(0,${height}) scale(1,-1)">`);
-        // console.log(paths.paths)
         // Iterate through each individual path
         for (const path of paths.paths) {
             // We reuse the toSVG function from the previous step

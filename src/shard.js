@@ -12,12 +12,14 @@ import { Mesh } from "./mesh.js"
 export class Shard {/// shard is like diamond kinda thing, made of triangles  / mesh so can be tranformed using those classes tools , fit inside etc
 
     constructor(a, b, h1, h2) {
+        this.color = "#000000"
         this.p1 = new Vector(a / 2, -b / 2, 0)
         this.p2 = new Vector(a / 2, b / 2, 0)
         this.p3 = new Vector(-a / 2, b / 2, 0)
         this.p4 = new Vector(-a / 2, -b / 2, 0)
         this.ph1 = new Vector(0, 0, h1)
         this.ph2 = new Vector(0, 0, h2)
+
 
 
         /// top 4 pyramid faces

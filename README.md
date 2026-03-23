@@ -4,9 +4,9 @@ Viewport is a vector-based 3D renderer written in javascript. It is used to prod
 ![image](./examples/assets/img/header.png)
 
 
-Viewport is a port or translation of [Ln](https://github.com/LoicGoulefert/ln), a 3d line art render engine originally developed by Michael Fogleman and expanded upon by Loic Goulefert written in Go. 
+Viewport is a port or translation of [Ln](https://github.com/LoicGoulefert/ln), a 3d line art render engine originally developed by Michael Fogleman and expanded upon by Loic Goulefert written in (Go)[https://go.dev/]. 
 
-I ported this library to javascript for myself to use and I thought it would be a good way to "learn" some Go. 
+I ported this library to javascript for myself to use and I thought it would be a good way to "learn" some Go. Most functionality is essentailly the same between libraries as everything was ported line by line. 
 
 This library is intended for plotter artists mostly, but anyone who needs to output an SVG made of lines in a 3D scene could benefit. 
 
@@ -18,6 +18,7 @@ Some primitives can be added in simple line art, or with more complex shading.
 - Cylinder, 🛢️
 - Shard -- like a diamond or two pyramids ♦️
 - Mesh - Obj and STL support. 
+- Terrain Plane-- A plane that can be distorted with a height function
 
 Some utilites are included and required for use such as a simple vector and matrix math. 
 
@@ -34,18 +35,18 @@ Examples are available to in the example directory, but to setup a scene, it onl
 ![primitives, skyscrapers, nodes](./examples/assets/img/example1.png) 
 
 # Todo list 
+- Good support for colors--- Preliminary color support added 3/22/26
 
 - Mesh Primitives
 - contains functions on existing non mesh primitives
 - Constructive solid geometry with mesh based trees
-- good support for colors
-- speedups of tree/collision calcs with WASM/web workers
+- speedups of tree/collision calcs with WASM/web workers/shader?
 - P5 geometry object compatibility
 - line overlap limits. 
 - more paths/shading styles 
 
 # Known issues
-- Complex scenes/mesh objects hit errors with stack count in chrome. Mesh such as the famous teapot can recreate the. 
+- Complex scenes/mesh objects hit errors with stack count in chrome. Mesh such as the famous teapot can recreate the. This is not an issue in the orignal go library. If you built a really cool scene with this, but hit a wall, you could probably get it going with the go library, everything is really the same other than color support. 
 - constructive solid geometry is not working correctly. Some paths are duplicated. 
 
 

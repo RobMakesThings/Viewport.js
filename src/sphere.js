@@ -20,6 +20,8 @@ export class Sphere {
         let min = new Vector(this.center.x - radius, this.center.y - radius, this.center.z - radius)
         let max = new Vector(this.center.x + radius, this.center.y + radius, this.center.z + radius)
         this.box = new Box(min, max)
+        this.color = "#000000"
+
     }
     compile() {
 
@@ -117,7 +119,7 @@ export class Sphere {
         for (let i = 0; i < 20000; i++) {
             let v = randomUnitVector()
             v = v.mulScalar(s.radius).add(s.center)
-            paths.push(new Path([v, v]))
+            paths.push(new Path([v, v],this.color))
 
         }
         return new Paths(paths)
@@ -157,7 +159,7 @@ export class Sphere {
 
                 path.push(v)
             }
-            paths.push(new Path(path))
+            paths.push(new Path(path,this.color))
 
 
         }
@@ -169,7 +171,7 @@ export class Sphere {
 
                 path.push(v)
             }   
-            paths.push(new Path(path))
+            paths.push(new Path(path,this.color))
         }
         return new Paths(paths)
     }
@@ -257,7 +259,7 @@ export class HSphere extends Sphere{
                 path.push(v)
 
             }
-            paths.push(new Path(path))
+            paths.push(new Path(path,this.color))
 
         }
         return new Paths(paths)
@@ -302,8 +304,8 @@ export class ShadedSphere extends Sphere{
                 let newPoint = rotM.mulDirection(p).normalize().mulScalar(s.radius).add(s.center)
                 path.push(newPoint)
             }
-            paths.push(new Path(path))
-        }
+            paths.push(new Path(path,this.color))
+        }s
         // let outLine = new OutlineSphere(s.center,s.radius,s.eye,s.up)
         // paths.push(outLine.paths()[0])
 

@@ -18,6 +18,8 @@ export class Cone {
     constructor(radius, height) {
         this.radius = radius
         this.height = height
+        this.color = "#000000"
+
     }
     compile() {
 
@@ -83,7 +85,7 @@ export class Cone {
             let y = this.radius * Math.sin(radians(a))
             result.push(new Path([
                 new Vector(x, y, 0), new Vector(0, 0, this.height)
-            ]))
+            ],this.color))
         }
         return new Paths(result)
     }
@@ -124,9 +126,9 @@ export class OutlineCone extends Cone {
             p0.push(new Vector(x, y, 0))
         }
         return new Paths([
-            new Path(p0),
-            new Path([new Vector(a0.x, a0.y, 0), new Vector(0, 0, c.height)]),
-            new Path([new Vector(b0.x, b0.y, 0), new Vector(0, 0, c.height)])
+            new Path(p0,this.color),
+            new Path([new Vector(a0.x, a0.y, 0), new Vector(0, 0, c.height)],this.color),
+            new Path([new Vector(b0.x, b0.y, 0), new Vector(0, 0, c.height)],this.color)
         ])
 
     }

@@ -17,6 +17,8 @@ export class Cube {
         this.min = min
         this.max = max
         this.box = new Box(this.min, this.max)
+        this.color = "#000000"
+
 
     }
 
@@ -92,7 +94,7 @@ export class Cube {
             let b = line[1]
             line[0] = new Vector(a[0], a[1], a[2])
             line[1] = new Vector(b[0], b[1], b[2])
-            result.push(new Path([line[0], line[1]]))
+            result.push(new Path([line[0], line[1]]),this.color)
         }
 
         return new Paths(result)
@@ -117,6 +119,7 @@ export class StripedCube extends Cube {
         super(min, max)
         this.stripesX = stripesX
         this.stripesY = stripesY
+        this.color = "#000000"
 
         this.stripesZ = stripesZ
         this.px = px /// px is percent x 
@@ -193,7 +196,7 @@ export class StripedCube extends Cube {
             line[1] = new Vector(b[0], b[1], b[2])
             line[2] = new Vector(c[0], c[1], c[2])
 
-            result.push(new Path([line[0], line[1], line[2]]))
+            result.push(new Path([line[0], line[1], line[2]]),this.color)
         }
         let normalCube = new Cube(this.min, this.max)
         result.push(normalCube.paths())

@@ -21,6 +21,8 @@ export class Cylinder {
         this.radius = radius
         this.z0 = z0
         this.z1 = z1
+        this.color = "#000000"
+
     }
     compile() {
 
@@ -85,7 +87,7 @@ export class Cylinder {
         for (let a = 0; a < 360; a += 10) {
             let x = c.radius * Math.cos(radians(a))
             let y = c.radius * Math.sin(radians(a))
-            result.push(new Path([new Vector(x, y, c.z0), new Vector(x, y, c.z1)]))
+            result.push(new Path([new Vector(x, y, c.z0), new Vector(x, y, c.z1)],this.color))
         }
         return new Paths(result)
     }
@@ -154,10 +156,10 @@ export class OutlineCylinder extends Cylinder {
 
         }
         return new Paths([
-            new Path(p0),
-            new Path(p1),
-            new Path([new Vector(a0.x, a0.y, c.z0), new Vector(a1.x, a1.y, c.z1)]),
-            new Path([new Vector(b0.x, b0.y, c.z0), new Vector(b1.x, b1.y, c.z1)])
+            new Path(p0,this.color),
+            new Path(p1,this.color),
+            new Path([new Vector(a0.x, a0.y, c.z0), new Vector(a1.x, a1.y, c.z1)],this.color),
+            new Path([new Vector(b0.x, b0.y, c.z0), new Vector(b1.x, b1.y, c.z1)],this.color)
 
         ])
 

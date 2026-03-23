@@ -1,6 +1,7 @@
 # Viewport.js
 Below I've added some quick links to primitives, and a p5 sketch to play around with some shapes. 
 
+
 - [Sphere](./Sphere.html) [ShadedSphere](./ShadedSphere.html) [HShpere](./HSphere.html)
 - [Cube](./Cube.html) [Striped Cube](./StripedCube.html)
 - [Cone](./Cone.html) [OutlineCone](./OutlineCone_OutlineCone.html)  
@@ -14,6 +15,8 @@ Meshes can be added as OBJ, STL, or just by making yuour own triangles.
 
 Some utilites are included and required for use such as a simple vector and matrix math. 
 Examples are available to in the example directory, but to setup a scene, it only takes a dozen lines of code as outlined below. 
+
+Color can be accessed/assigned per object with the .color parameter. This parameter can take a function that runs on each path. 
 
 ## Getting started
 ````

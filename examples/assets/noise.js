@@ -193,7 +193,10 @@ class Perlin {
 }
 
 
+/**
+ * const n = tooloud.Worley.Euclidean(x, y, z);
 
+ */
 class Worley {
     constructor(seed = 3000) {
         this._seedValue = seed;
