@@ -1,9 +1,9 @@
 
 import { Worley, Perlin, Fractal } from "./assets/noise.js";
 import { Rotate } from "../src/matrix.js";
-import { Scene, Cube, Vector, Paths, constrain, Path, TerrainPlane, StripedCube, TransformedShape, Translate, radians, remap, Shard } from "../src/viewport.js";
-let colors = ["#f200fa", "#ffd900","#00c3ff"]
-let colors2 = ["#faab00", "#9900ff"]
+import { Scene, Cube, Vector, Paths, constrain, Path, TerrainPlane, StripedCube, TransformedShape, Translate, radians, remap, Shard, OutlineSphere, Sphere, HSphere } from "../src/viewport.js";
+let colors2 = ["#cfb14dd0", "#ff8800"]
+let colors = ["#639fb1", "#54d100","#ff0000"]
 
 let noise =new Perlin(Date.now())
 let center = new Vector(0, 0, 0)
@@ -41,10 +41,18 @@ for (let i = offset; i < TAU+offset; i += TAU / 6) {
     building = new TransformedShape(building, matrix)
     // scene.add(building)
 }}
+let sun2 = new Sphere(new Vector(0,0,-10),30)
+sun2.color= ()=>{return colors[ Math.ceil(Math.random()*colors.length-1)]}
 
+let sun = new Sphere(new Vector(-380,50,10),30)
+sun.paths= sun.paths1
+sun.color= ()=>{return colors[ Math.ceil(Math.random()*colors.length-1)]}
+scene.add(sun)
+scene.add(sun2)
 
-
-
+const fractalCallback = (x, y, z) => {
+    return noise2.Euclidean(x, y, z, 120)[0];
+}
 const sketch = (sketch) => {
 
 
@@ -56,31 +64,38 @@ const sketch = (sketch) => {
         let saveButton = s.createButton("Save")
         saveButton.position(0, h)
         saveButton.mousePressed(save)
-        let divs = 80
+        let divs = 100
         const terrain = new TerrainPlane(
-            new Vector(-250, -220, -25), up, 600, divs, divs,
+            new Vector(-250, -220, -80), up, 800, divs, divs,
 
             (x, y) => {
 
-                x = x + w/ 10
-                y = y + h / 10
-                let scale = .033;
-                let n1 =Fractal.noise(x/1000,y/1000,x,1,noise.noise)
-                scale = (scale * n1)
-                let n = 120*s.noise((x) * scale , (y) * scale) ;
-                n = constrain(n, 3, 75)
+                x = x + w/ 7
+                y = y + h / 7
+                let scale = .33;
+                let n1 =Fractal.noise(x/60,y/60,(y)/60,3,fractalCallback)
+                // console.log(n1)
+                // n1 = n1.reduce((a,b)=>{return a+b})/3
+                let n2 = noise2.Manhattan(x/80,y/80,(y)/80)
+                n2 = n2.reduce((a,b)=>{return a+b})/3
+                // console.log(n2)
+                n1 = easeInOutCubic(n1)
+                // n2 - easeInOutCubic(n2)
+                // n1 = remap(n1,0,1,-.5,1)
+                let n =n1*80//n1* 120*s.noise((x) * scale , (y) * scale)*3 ;
+                n = constrain(n, -30, 60)
 
                 return n
             });
         terrain.color = function(p){return  colors[constrain(Math.ceil(noise.noise(p.verts[0].x*2,p.verts[0].y*2,noise.noise(p.verts[0].y,0,0)) * colors.length),0,colors.length-1)]}
-        terrain.linesPerQuad=25
+        terrain.linesPerQuad=15
         scene.add(terrain)
         
         let background = new TerrainPlane(new Vector(-100,-100,0),new Vector(0,1,0),1000,20,20,(x,y)=>{return 1})
-            background.linesPerQuad= 120
+            background.linesPerQuad= 60
             background= new TransformedShape(background,Rotate(new Vector(0,1,0),radians(-90)).translate(new Vector(-500,-500,100)))
             background.shape.color = ()=>{return colors2[ Math.ceil(Math.random()*colors2.length-1)]}
-            console.log(background)
+            // console.log(background)
         scene.add(background)
         paths = scene.render(eye, center, up, w, h, fovy, 0.01, 2000, 0.1)
     };
@@ -89,7 +104,7 @@ const sketch = (sketch) => {
         s.background(255);
         s.stroke(0)
         s.noFill()
-        s.strokeWeight(.4)
+        s.strokeWeight(.6)
         for (let path of paths.paths) {
             s.push()
             s.beginShape()
@@ -98,7 +113,6 @@ const sketch = (sketch) => {
             s.scale(1, -1)
 
             s.translate(-w / 2, -h / 2)
-            console.log(path) 
             let color =path.color
             if(typeof path.color === "function"){
             // console.log(this)
@@ -155,3 +169,94 @@ let myp5 = new p5(sketch, 'p5sketch');
 
 //     this.saveSVGToFile(lines.join("\n"))
 // }
+
+// Acceleration until halfway, then deceleration
+ function easeInOutCubic( t ) {
+    return t < 0.5 ? 4 * t * t * t : ( t - 1 ) * ( 2 * t - 2 ) * ( 2 * t - 2 ) + 1;
+}
+
+// Accelerating from zero velocity
+ function easeInQuart( t ) {
+    return t * t * t * t;
+}
+
+// Decelerating to zero velocity
+ function easeOutQuart( t ) {
+    const t1 = t - 1;
+    return 1 - t1 * t1 * t1 * t1;
+}
+
+function easeInOutBounce( t ) {
+
+    if( t < 0.5 ) {
+
+        return easeInBounce( t * 2 ) * 0.5;
+        
+    }
+
+    return ( easeOutBounce( ( t * 2 ) - 1 ) * 0.5 ) + 0.5;
+
+}
+
+// Bounce to completion
+ function easeOutBounce( t ) {
+
+    const scaledTime = t / 1;
+
+    if( scaledTime < ( 1 / 2.75 ) ) {
+
+        return 7.5625 * scaledTime * scaledTime;
+
+    } else if( scaledTime < ( 2 / 2.75 ) ) {
+
+        const scaledTime2 = scaledTime - ( 1.5 / 2.75 );
+        return ( 7.5625 * scaledTime2 * scaledTime2 ) + 0.75;
+
+    } else if( scaledTime < ( 2.5 / 2.75 ) ) {
+
+        const scaledTime2 = scaledTime - ( 2.25 / 2.75 );
+        return ( 7.5625 * scaledTime2 * scaledTime2 ) + 0.9375;
+
+    } else {
+
+        const scaledTime2 = scaledTime - ( 2.625 / 2.75 );
+        return ( 7.5625 * scaledTime2 * scaledTime2 ) + 0.984375;
+
+    }
+
+}
+
+// Bounce increasing in velocity until completion
+ function easeInBounce( t ) {
+    return 1 - easeOutBounce( 1 - t );
+}
+
+// Increasing velocity until stop
+ function easeInCirc( t ) {
+
+    const scaledTime = t / 1;
+    return -1 * ( Math.sqrt( 1 - scaledTime * t ) - 1 );
+
+}
+
+// Start fast, decreasing velocity until stop
+ function easeOutCirc( t ) {
+
+    const t1 = t - 1;
+    return Math.sqrt( 1 - t1 * t1 );
+
+}
+
+// Fast increase in velocity, fast decrease in velocity
+ function easeInOutCirc( t ) {
+
+    const scaledTime = t * 2;
+    const scaledTime1 = scaledTime - 2;
+
+    if( scaledTime < 1 ) {
+        return -0.5 * ( Math.sqrt( 1 - scaledTime * scaledTime ) - 1 );
+    }
+
+    return 0.5 * ( Math.sqrt( 1 - scaledTime1 * scaledTime1 ) + 1 );
+
+}

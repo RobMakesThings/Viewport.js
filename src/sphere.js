@@ -2,7 +2,7 @@
 import { Vector ,randomUnitVector} from './vector.js'
 import { Box } from './box.js'
 import { Path,Paths } from './path.js'
-import { Translate,Rotate } from './matrix.js'
+import { Translate,Rotate,Matrix } from './matrix.js'
 import { radians } from './util.js'
 import { Hit ,noHit} from './hit.js'
 import { remap } from './util.js'
@@ -125,15 +125,16 @@ export class Sphere {
         return new Paths(paths)
 
     }
-    paths111() {
+    paths() {
         let s = this
-        let equator = []
+        let equator = new Path()
+        equator.color=this.color
         for (let lng = 0; lng <= 360; lng++) {
             let v = latLngToXYZ(0, lng, s.radius)
-            equator.push(v)
+            equator.verts.push(v)
         }
         let paths = []
-        for (let i = 0; i < 100; i++) {
+        for (let i = 0; i < 150; i++) {
             let m = new Matrix()
             for (let j = 0; j < 3; j++) {
                 let v = randomUnitVector()
@@ -145,7 +146,7 @@ export class Sphere {
         return new Paths(paths)
 
     }
-    paths() {
+    paths1() {
         let s = this
         let paths = []
         let n = 10
