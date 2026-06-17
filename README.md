@@ -6,7 +6,7 @@ Viewport is a vector-based 3D renderer written in javascript. It is used to prod
 
 Viewport is a port or translation of [Ln](https://github.com/LoicGoulefert/ln), a 3d line art render engine originally developed by Michael Fogleman and expanded upon by Loic Goulefert written in [Go](https://go.dev/). 
 
-I ported this library to javascript for myself to use and I thought it would be a good way to "learn" some Go. Most functionality is essentailly the same between libraries as everything was ported line by line. 
+I ported this library to javascript for myself to use and I thought it would be a good way to "learn" some Go. Most functionality is essentially the same between libraries as everything was ported line by line. 
 
 This library is intended for plotter artists mostly, but anyone who needs to output an SVG made of lines in a 3D scene could benefit. 
 
@@ -44,6 +44,7 @@ Examples are available to in the example directory, but to setup a scene, it onl
 - P5 geometry object compatibility
 - line overlap limits. 
 - more paths/shading styles 
+-plot statistics
 
 # Known issues
 - Complex scenes/mesh objects hit errors with stack count in chrome. Mesh such as the famous teapot can recreate the. This is not an issue in the orignal go library. If you built a really cool scene with this, but hit a wall, you could probably get it going with the go library, everything is really the same other than color support. 
