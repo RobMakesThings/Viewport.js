@@ -15,6 +15,7 @@ export class Scene {
         this.shapes = []
         this.tree = null
         this.projection = "perspective"
+        this.stats = {}
     }
     /**
      * 
@@ -110,23 +111,27 @@ export class Scene {
 
         this.compile()
         let paths = this.paths()
-
+        this.stats.totalLines=paths.paths.length   
         if (step > 0) {
             paths = paths.chop(step)
         }
 
         paths = paths.filter(matrix, eye, this, step)
 
+        this.stats.renderedLines= paths.paths.length
 
         if (step > 0) {
 
             paths = paths.simplify(1e-6)
         }
-
+        this.stats.culledLines=paths.paths.length-this.stats.totalLines
         matrix = Translate(new Vector(1, 1, 0))
         matrix = matrix.scale(new Vector(width / 2, height / 2, 0))
         paths = paths.transform(matrix)
         return paths
     }
+    
 
 }
+
+ 

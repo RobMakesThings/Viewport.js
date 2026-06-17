@@ -1,15 +1,17 @@
 
 import { Worley, Perlin, Fractal } from "./assets/noise.js";
 import { Rotate } from "../src/matrix.js";
-import { Scene, Cube, Vector, Paths, constrain, Path, TerrainPlane, StripedCube, TransformedShape, Translate, radians, remap, Shard, OutlineSphere, Sphere, HSphere } from "../src/viewport.js";
-let colors2 = ["#cfb14dd0", "#ff8800"]
-let colors = ["#639fb1", "#54d100","#ff0000"]
+import { Scene, Cube, Vector, Paths, constrain, Path, TerrainPlane, StripedCube, TransformedShape, Translate, radians, remap, Shard, OutlineSphere, Sphere, HSphere, Triangle, Mesh } from "../src/viewport.js";
+import * as ease from './assets/easing.js'
 
-let noise =new Perlin(Date.now())
+let colors2 = ["#00d9ff","#ff8800","#a50000"]
+let colors =  ["#00d9ff","#ff8800","#ff1e00"]
+
+let noise =new Perlin(1777680000)
 let center = new Vector(0, 0, 0)
 let up = new Vector(0, 0, 1)
-let eye = new Vector(120,0, 150)
-let noise2 = new Worley(Date.now())
+let eye = new Vector(120,0, 70)
+let noise2 = new Worley(17776804460)
 
 let scene = new Scene()
 
@@ -41,17 +43,17 @@ for (let i = offset; i < TAU+offset; i += TAU / 6) {
     building = new TransformedShape(building, matrix)
     // scene.add(building)
 }}
-let sun2 = new Sphere(new Vector(0,0,-10),30)
+let sun2 = new Sphere(new Vector(0,0,-60),30)
 sun2.color= ()=>{return colors[ Math.ceil(Math.random()*colors.length-1)]}
 
-let sun = new Sphere(new Vector(-380,50,10),30)
-sun.paths= sun.paths1
+let sun = new HSphere(new Vector(-380,50,50),45,70)
+// sun.paths= sun.paths1
 sun.color= ()=>{return colors[ Math.ceil(Math.random()*colors.length-1)]}
 scene.add(sun)
-scene.add(sun2)
-
+// scene.add(sun2)
 const fractalCallback = (x, y, z) => {
-    return noise2.Euclidean(x, y, z, 120)[0];
+    // return noise2.Euclidean(x, y, z, 150)[1];
+    return noise2.Euclidean(x, y, z).reduce((a,b)=>{return a+b})/3
 }
 const sketch = (sketch) => {
 
@@ -64,37 +66,48 @@ const sketch = (sketch) => {
         let saveButton = s.createButton("Save")
         saveButton.position(0, h)
         saveButton.mousePressed(save)
-        let divs = 100
+        let divs = 160
         const terrain = new TerrainPlane(
-            new Vector(-250, -220, -80), up, 800, divs, divs,
+            new Vector(-250, -250, -1), up, 600, divs, divs,
 
             (x, y) => {
 
                 x = x + w/ 7
                 y = y + h / 7
                 let scale = .33;
-                let n1 =Fractal.noise(x/60,y/60,(y)/60,3,fractalCallback)
+                // let n1 =Fractal.noise(x/120,y/120,(y)/120,8,fractalCallback)
+                let n1 =Fractal.noise(x/120,y/120,(y)/120,16,fractalCallback)
                 // console.log(n1)
                 // n1 = n1.reduce((a,b)=>{return a+b})/3
-                let n2 = noise2.Manhattan(x/80,y/80,(y)/80)
+                let n2 = noise2.Manhattan(x/50,y/50,(y)/50)
                 n2 = n2.reduce((a,b)=>{return a+b})/3
+                scale = n2
                 // console.log(n2)
-                n1 = easeInOutCubic(n1)
-                // n2 - easeInOutCubic(n2)
-                // n1 = remap(n1,0,1,-.5,1)
-                let n =n1*80//n1* 120*s.noise((x) * scale , (y) * scale)*3 ;
-                n = constrain(n, -30, 60)
+                // n1 = (n1+n2)/2 
+
+                // n1 = ease.easeInOutElastic(n1)
+                // n2 = ease.easeInOutCubic(n2)
+                n1 = remap(n1,0,1,-1,1)
+                let n =n1*70//n1* 120*s.noise((x) * scale , (y) * scale)*3 ;
+                n = constrain(n, -100, 60)
 
                 return n
             });
-        terrain.color = function(p){return  colors[constrain(Math.ceil(noise.noise(p.verts[0].x*2,p.verts[0].y*2,noise.noise(p.verts[0].y,0,0)) * colors.length),0,colors.length-1)]}
-        terrain.linesPerQuad=15
+        // terrain.setColor ( ()=>{return colors2[ Math.ceil(Math.random()*colors2.length-1)]})
+        terrain.color = function(p){return  colors[constrain(Math.ceil(noise.noise(p.verts[0].x,p.verts[0].y,noise.noise(p.verts[0].y,0,0)) * colors.length),0,colors.length-1)]}
+        terrain.linesPerQuad=7
+        terrain.eye= eye
+        // terrain.paths =()=>{return terrain.mesh.lineFill()}
+        terrain.genMesh()
+        terrain.paths =()=>{return new Paths(terrain.mesh.lineFill().paths.concat(terrain.horizontalLines().paths))}
+
         scene.add(terrain)
         
-        let background = new TerrainPlane(new Vector(-100,-100,0),new Vector(0,1,0),1000,20,20,(x,y)=>{return 1})
-            background.linesPerQuad= 60
-            background= new TransformedShape(background,Rotate(new Vector(0,1,0),radians(-90)).translate(new Vector(-500,-500,100)))
-            background.shape.color = ()=>{return colors2[ Math.ceil(Math.random()*colors2.length-1)]}
+        let background = new TerrainPlane(new Vector(-20,-50,0),new Vector(0,1,0),1000,20,20,(x,y)=>{return s.noise((x) /500 , (y) /500)*10})
+            background.linesPerQuad= 40
+            background.eye = eye
+            background= new TransformedShape(background,Rotate(new Vector(0,1,0),radians(-90)).translate(new Vector(-500,-500,220)))
+            background.shape.setColor ( ()=>{return colors2[ Math.ceil(Math.random()*colors2.length-1)]})
             // console.log(background)
         scene.add(background)
         paths = scene.render(eye, center, up, w, h, fovy, 0.01, 2000, 0.1)
@@ -134,129 +147,3 @@ const sketch = (sketch) => {
 
 let myp5 = new p5(sketch, 'p5sketch');
 
-
-// Path.prototype.toSVG = function (color, path = this) {
-
-//     let coords = ''
-//     for (let v of this.verts) {
-
-//         coords += `${v.x},${v.y} `
-//     }
-//     const points = coords
-
-//     return `<polyline stroke="${color}" fill="none" points="${points}" />`;
-// }
-// Paths.prototype.pathsToSVG = function (paths = this.paths, width, height) {
-//     const lines = [];
-
-//     // Open the SVG tag
-//     lines.push(`<svg width="${width}" height="${height}" version="1.1" baseProfile="full" xmlns="http://www.w3.org/2000/svg">`);
-//     // Add the coordinate system transformation (flips Y-axis to be bottom-up)
-//     lines.push(`  <g transform="translate(0,${height}) scale(1,-1)">`);
-//     // console.log(paths.paths)
-//     // Iterate through each individual path
-
-//     for (const path of paths.paths) {
-//         // We reuse the toSVG function from the previous step
-//     let col = colors[constrain(Math.ceil(noise.noise(path.verts[0].x*2,path.verts[0].y*2,noise.noise(path.verts[0].y,0,0)) * colors.length),0,colors.length-1)]
-        
-//         lines.push(`${path.toSVG(col)}`);
-//     }
-
-//     // Close tags
-//     lines.push("</g>");
-//     lines.push("</svg>");
-
-//     this.saveSVGToFile(lines.join("\n"))
-// }
-
-// Acceleration until halfway, then deceleration
- function easeInOutCubic( t ) {
-    return t < 0.5 ? 4 * t * t * t : ( t - 1 ) * ( 2 * t - 2 ) * ( 2 * t - 2 ) + 1;
-}
-
-// Accelerating from zero velocity
- function easeInQuart( t ) {
-    return t * t * t * t;
-}
-
-// Decelerating to zero velocity
- function easeOutQuart( t ) {
-    const t1 = t - 1;
-    return 1 - t1 * t1 * t1 * t1;
-}
-
-function easeInOutBounce( t ) {
-
-    if( t < 0.5 ) {
-
-        return easeInBounce( t * 2 ) * 0.5;
-        
-    }
-
-    return ( easeOutBounce( ( t * 2 ) - 1 ) * 0.5 ) + 0.5;
-
-}
-
-// Bounce to completion
- function easeOutBounce( t ) {
-
-    const scaledTime = t / 1;
-
-    if( scaledTime < ( 1 / 2.75 ) ) {
-
-        return 7.5625 * scaledTime * scaledTime;
-
-    } else if( scaledTime < ( 2 / 2.75 ) ) {
-
-        const scaledTime2 = scaledTime - ( 1.5 / 2.75 );
-        return ( 7.5625 * scaledTime2 * scaledTime2 ) + 0.75;
-
-    } else if( scaledTime < ( 2.5 / 2.75 ) ) {
-
-        const scaledTime2 = scaledTime - ( 2.25 / 2.75 );
-        return ( 7.5625 * scaledTime2 * scaledTime2 ) + 0.9375;
-
-    } else {
-
-        const scaledTime2 = scaledTime - ( 2.625 / 2.75 );
-        return ( 7.5625 * scaledTime2 * scaledTime2 ) + 0.984375;
-
-    }
-
-}
-
-// Bounce increasing in velocity until completion
- function easeInBounce( t ) {
-    return 1 - easeOutBounce( 1 - t );
-}
-
-// Increasing velocity until stop
- function easeInCirc( t ) {
-
-    const scaledTime = t / 1;
-    return -1 * ( Math.sqrt( 1 - scaledTime * t ) - 1 );
-
-}
-
-// Start fast, decreasing velocity until stop
- function easeOutCirc( t ) {
-
-    const t1 = t - 1;
-    return Math.sqrt( 1 - t1 * t1 );
-
-}
-
-// Fast increase in velocity, fast decrease in velocity
- function easeInOutCirc( t ) {
-
-    const scaledTime = t * 2;
-    const scaledTime1 = scaledTime - 2;
-
-    if( scaledTime < 1 ) {
-        return -0.5 * ( Math.sqrt( 1 - scaledTime * scaledTime ) - 1 );
-    }
-
-    return 0.5 * ( Math.sqrt( 1 - scaledTime1 * scaledTime1 ) + 1 );
-
-}

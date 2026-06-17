@@ -63,6 +63,8 @@ export class Path {//
         let result = []
         let path = []
         let p = this.verts
+                // console.log(this.color())
+
         for (let v of p) {
 
             let clipV = clipFilter(matrix, eye, step, v)
@@ -208,7 +210,7 @@ export class Paths {
         for (let path of this.paths) {
             path = path.simplify(threshold)
             if (!(path instanceof Path)){/// not really a good reason we have to do this that ive found, works sometimes without it but not others
-                path = new Path(path)
+                path = new Path(path,this.color)
             }
             result.push(path)/// might need to unpack values here? idk we'll see. <<< i did indeed need to unpack the values
         }

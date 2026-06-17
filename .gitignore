@@ -1,1 +1,4 @@
 src/jsdoc.json
+
+examples/Terrain2.js
+examples/assets/torusCrazy.obj

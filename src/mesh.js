@@ -11,6 +11,7 @@ import { loadOBJ } from "./obj.js"
 import { loadBinaryStl, loadTextSTL } from "./stl.js"
 import { Path, Paths } from './path.js'
 import { Triangle } from "./triangle.js"
+import { constrain, remap } from "./util.js"
 
 /**
      * 
@@ -22,15 +23,21 @@ import { Triangle } from "./triangle.js"
      */
 export class Mesh {
 
-    constructor(triangles) {
+    constructor(triangles, color = "#000000") {
 
         this.box = boxForTriangles(triangles)
         this.triangles = triangles
         this.tree = null
-        this.color = "#000000"
+        this.color = color
 
         this.compile()
 
+    }
+    setColor(color) {
+        this.color = color
+        for (let tri of this.triangles) {
+            tri.color = this.color
+        }
     }
     compile() {
         if (this.tree == null) {
@@ -54,11 +61,81 @@ export class Mesh {
         }
         return this.tree.intersect(ray)
     }
+    lineFill() {
+        let paths = []
+        let horizontal, vertical
+        vertical = true
+        // horizontal = true
+        for (let [i, tri] of this.triangles.entries()) {
+            let num = 16
 
-    paths() {
+            // console.log(tri.getArea())
+            // num = remap(tri.getArea(),0,.3,1,15)
+            num = Math.floor(constrain(num, 1, 20))
+            // console.log(num)
+            if (horizontal) {
+                if (i % 2 == 0) {
+                    for (let j = 0; j <= num; j++) {
+                        let lerpFactor = j / num
+
+                        let p1 = tri.v1.lerp(tri.v2, lerpFactor)
+                        let p2 = tri.v1.lerp(tri.v3, lerpFactor)
+                        paths.push(new Path([p1, p2], this.color))
+
+
+                    }
+                }
+                else {
+                    for (let j = 0; j < num; j++) {
+                        let lerpFactor = j / num
+                        let p1 = tri.v1.lerp(tri.v2, lerpFactor)
+                        let p2 = tri.v3.lerp(tri.v2, lerpFactor)
+                        paths.push(new Path([p1, p2], this.color))
+
+
+                    }
+                }
+            }
+            if (vertical) {
+                let verts = [tri.v1, tri.v2, tri.v3]
+
+                if (i % 2 == 0) {
+
+                    for (let j = 0; j <= num; j++) {
+                        let lerpFactor = j / num
+                        let p1 = tri.v2.lerp(tri.v3, lerpFactor)
+                        let p2 = tri.v1.lerp(tri.v3, lerpFactor)
+                        paths.push(new Path([p1, p2], this.color))
+
+
+                    }
+                }
+                else {
+                    for (let j = 0; j < num; j++) {
+                        let lerpFactor = j / num
+                        let p1 = tri.v1.lerp(tri.v2, lerpFactor)
+                        let p2 = tri.v1.lerp(tri.v3, lerpFactor)
+                        paths.push(new Path([p1, p2], this.color))
+
+
+                    }
+
+                }
+
+            }
+
+
+
+
+        }
+        return new Paths(paths)
+
+    }
+    paths(eye = null) {
+        // return(this.lineFill())
         let result = []
         for (let tri of this.triangles) {
-            result.push(tri.paths())
+            result.push(tri.paths(eye))
         }
         return new Paths(result)
     }
@@ -123,7 +200,7 @@ export class Mesh {
     /**
      * 
      * @param {Number} size Size of cube example 1/36
-     * @returns {Array[Cube]} Array of cubes to be added to scene
+     * @returns {Cube[]} Array of cubes to be added to scene
      */
     voxelize(size) {
         let m = this

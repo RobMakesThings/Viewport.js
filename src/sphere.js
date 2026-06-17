@@ -149,7 +149,7 @@ export class Sphere {
     paths1() {
         let s = this
         let paths = []
-        let n = 10
+        let n = 3
         let o = 10
         for (let lat = -90 + o; lat <= 90 - o; lat += n) {
             let path = []

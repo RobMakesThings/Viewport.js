@@ -1,13 +1,13 @@
 
 
-import { Scene, Vector, loadTextSTL,Translate, radians } from "../src/viewport.js";
+import { Scene, Vector, loadTextSTL,Translate, radians, Triangle, loadOBJ } from "../src/viewport.js";
 
 async function loadObject() {
     // const text = await fetch("./assets/crazyCube.obj").then(r => r.text());
 
     // let object = loadOBJ(text) 
 //    let object= loadBinaryStl('./assets/Cube.stl')
-   let object= loadTextSTL('./assets/CubeText.stl')
+   let object= loadOBJ('./assets/torusCrazy.obj')
     console.log(object)
     return object
 }
@@ -17,7 +17,7 @@ let scene = new Scene()
 let n = 1
 
 
-
+// Triangle.prototype.paths  = Triangle.prototype.triShrinkShade
 
 let paths
 // scene.add(cube)
@@ -38,14 +38,21 @@ const sketch =  (sketch) => {
     let s = sketch
     sketch.setup =async  () => {
         sketch.createCanvas(w, h);
+         let save = function () { paths.pathsToSVG(paths, w, h) }
+
+        let saveButton = s.createButton("Save")
+        saveButton.position(0, h)
+        saveButton.mousePressed(save)
         const  mesh = await loadObject()
         // mesh.fitInside(cube.boundingBox(),new Vector(.5,.5,.5))
-        mesh.unitCube()
+        // mesh.unitCube()
         let tMatrix = Translate(new Vector(.2,.2,0))
         tMatrix = tMatrix.rotate(up,radians(90))
-        tMatrix = tMatrix.rotate(new Vector(0,1,0),radians(90))
+        // tMatrix = tMatrix.rotate(new Vector(0,1,0),radians(36))
+        // tMatrix = tMatrix.rotate(new Vector(2,0,0),radians(2))
 
-        // mesh.transform(tMatrix)
+
+        mesh.transform(tMatrix)
         // mesh.moveTo(new Vector(2,2,.2),new Vector(5,.5,.5))
         scene.add(mesh)
         paths = scene.render(eye, center, up, w, h, fovy, 0.01, 100, 0.01)
